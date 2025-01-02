@@ -1,1 +1,31 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@300;400;500&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: 'Playfair Display', serif;
+  color: #333333;
+  background-color: #f8f8f8;
+}
+
+.text-vc-black {
+  color: #1a1a1a;
+}
+
+.text-vc-gray {
+  color: #808080;
+}
+
+.bg-vc-white {
+  background-color: #ffffff;
+}
+
+.border-vc {
+  border-color: #cccccc;
+}
+
+.btn-primary {
+  @apply bg-black text-white py-2 px-4 rounded-lg hover:bg-gray-800 transition;
+}
+

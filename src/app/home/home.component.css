@@ -1,0 +1,9 @@
+/* Ajouter une animation douce au survol */
+a:hover {
+  transition: all 0.3s ease-in-out;
+}
+
+/* Police personnalisée si disponible */
+h1, h2 {
+  font-family: 'Playfair Display', serif; /* Exemple pour une police élégante */
+}

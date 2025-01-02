@@ -1,0 +1,21 @@
+<div class="container mx-auto p-8">
+  <h1 class="text-4xl font-bold text-center mb-8">{{ selectedJewelry }}</h1>
+
+  <!-- Encadré des informations -->
+  <div class="border border-vc rounded-lg p-6 bg-vc-white mb-8">
+    <h2 class="text-2xl font-semibold mb-4">Informations du bijou</h2>
+    <ul>
+      <li *ngFor="let option of customizationOptions" class="mb-2">
+        <strong>{{ option }}:</strong> {{ selectedOptions[option] || 'Non défini' }}
+      </li>
+    </ul>
+  </div>
+
+  <!-- Liste des outils de personnalisation -->
+  <h2 class="text-2xl font-semibold mb-4">Personnaliser</h2>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <button *ngFor="let option of customizationOptions" class="btn-primary" (click)="onCustomize(option)">
+      {{ option }}
+    </button>
+  </div>
+</div>
