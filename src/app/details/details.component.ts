@@ -50,7 +50,7 @@ export class DetailsComponent {
 
   getImagePath(subFunction: string): string {
     // Remplace les espaces par des tirets et met tout en minuscule
-    return `/assets/images/${subFunction.replace(/\s+/g, '-').toLowerCase()}.png`;
+    return `${subFunction.replace(/\s+/g, '-').toLowerCase()}.png`;
   }
 
   navigateToCreation(subFunction: string): void {

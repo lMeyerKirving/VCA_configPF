@@ -3,6 +3,12 @@
   <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-12">
     <a *ngFor="let item of items" [routerLink]="item.link" class="block bg-vc-white border border-vc rounded-lg shadow-md hover:shadow-lg hover:scale-105 transition-transform duration-300">
       <div class="p-8 text-center">
+        <img *ngIf="item.image; else defaultImage" [src]="item.image" alt="{{ item.name }}" class="mx-auto w-32 h-32 object-contain mb-4">
+        <ng-template #defaultImage>
+          <div class="w-32 h-32 mx-auto bg-gray-200 flex items-center justify-center rounded-md">
+            <span class="text-gray-500">Pas d'image</span>
+          </div>
+        </ng-template>
         <h2 class="text-xl font-medium text-vc-black">{{ item.name }}</h2>
       </div>
     </a>

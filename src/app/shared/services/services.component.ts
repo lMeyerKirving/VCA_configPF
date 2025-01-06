@@ -1,0 +1,73 @@
+import { Injectable} from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+
+
+@Injectable({
+  providedIn: 'root', // or 'any' or a specific module
+})
+
+export class ServicesComponent {
+  public audrosServer = `https://dms-server/`;
+  private _audrosSession: (string | undefined);
+  public user = "audros";
+  public psw = "aupwd";
+  public Ct = '40';
+  public authInfos = 'AUSessionID=';
+
+  private _sessionId = ""
+  private _baseUrl: string = '';
+
+  connected: BehaviorSubject<boolean> = new BehaviorSubject(false);
+
+  constructor(private _http: HttpClient){
+
+  }
+
+
+  autologin(): Observable<any> {
+
+    //this._baseUrl = `cocoon/View/ExecuteService/fr/AW_AuplResult3.text?${this.authInfos}${sessionID}&ServiceSubPackage=mehdi&ServiceName=Bijoux.au&ServiceParameters=`;
+    //console.log("url base est : ", this._baseUrl);
+    const param = "login";
+    const data = "";
+
+    const url = `${this.audrosServer}${this._baseUrl}${param}@${data}@`;
+
+    return new Observable(observer => {
+      const url = `${this.audrosServer}cocoon/View/LoginCAD.xml?userName=${this.user}&computerName=AWS&userPassword=${this.psw}&dsn=dmsDS&Client_Type=${this.Ct}`;
+
+      this._http.get(url, {responseType: 'text'}).subscribe({
+        next: (response: string) => {
+          console.log("XML Response:", response);
+
+          // Parse the XML response using DOMParser
+          const parser = new DOMParser();
+          const xmlDoc = parser.parseFromString(response, 'application/xml');
+
+          const resultElement = xmlDoc.querySelector('result');
+
+          if (resultElement) {
+            this._sessionId = resultElement.textContent || "";
+            console.log("Connected with session: ", this._sessionId);
+            this.connected.next(true);
+            this._baseUrl = `cocoon/View/ExecuteService/fr/AW_AuplResult3.text?${this.authInfos}${this._sessionId}&ServiceSubPackage=mehdi&ServiceName=Bijoux.au&ServiceParameters=`;
+            console.log("url base est : ", this._baseUrl)
+
+          } else {
+            console.error("Autologin failed: Unable to extract session id from XML");
+          }
+          // Assume successful login if we get here
+          observer.next(response); // Emit successful login
+          observer.complete(); // Complete the observable
+        },
+        error: (error) => {
+          //console.error("Autologin failed:", error);
+          observer.error(error); // Propagate error
+        }
+      });
+    });
+  }
+
+
+}
