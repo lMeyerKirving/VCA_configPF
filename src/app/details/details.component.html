@@ -5,14 +5,13 @@
   <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
     <div *ngFor="let subFunction of subFunctions"
          class="block bg-white border border-gray-300 rounded-lg shadow-md hover:shadow-xl hover:scale-105 transition-transform duration-500"
+         [style.backgroundImage]="'url(' + getImagePath(subFunction) + ')'"
+         [style.backgroundSize]="'cover'"
+         [style.backgroundPosition]="'center'"
          (click)="navigateToCreation(subFunction)">
 
       <div class="p-6 text-center">
-        <img
-          [src]="getImagePath(subFunction)"
-          alt="{{ subFunction }}"
-          class="h-32 w-full object-cover rounded-lg mb-4">
-        <h2 class="text-xl font-semibold text-gray-700 hover:text-gray-800 tracking-tight">
+        <h2 class="text-xl font-semibold text-gray-700 hover:text-gray-800 tracking-tight bg-white bg-opacity-75 p-2 rounded-lg">
           {{ subFunction }}
         </h2>
       </div>
