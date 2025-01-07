@@ -3,15 +3,19 @@
     Bienvenue sur le configurateur de bijoux
   </h1>
   <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-12">
-    <a *ngFor="let item of items" [routerLink]="item.link"
-       class="block bg-white border border-gray-300 rounded-lg shadow-md hover:shadow-xl hover:scale-105 transition-transform duration-500"
-       [style.backgroundImage]="'url(' + item.image + ')'"
-       [style.backgroundSize]="'cover'"
-       [style.backgroundPosition]="'center'">
+    <a *ngFor="let item of items; let i = index" [routerLink]="item.link"
+       class="block border border-gray-300 rounded-lg shadow-md hover:shadow-xl hover:scale-105 transition-transform duration-500"
+       [style.backgroundImage]="item.image ? 'url(' + item.image + ')' : ''"
+       [style.backgroundSize]="item.image ? 'cover' : ''"
+       [style.backgroundPosition]="item.image ? 'center' : ''"
+       [ngClass]="{
+         'bg-[#b5a18c]': !item.image && ((i % columns + Math.floor(i / columns)) % 2 !== 0),
+         'bg-[#006F62]': !item.image && ((i % columns + Math.floor(i / columns)) % 2 === 0)
+       }">
       <div class="p-8 text-center">
-        <div class="w-32 h-32 mx-auto bg-gray-100 flex items-center justify-center rounded-md"
+        <div class="w-32 h-32 mx-auto flex items-center justify-center rounded-md"
              *ngIf="!item.image">
-          <span class="text-gray-400">Pas d'image</span>
+          <span class="text-white">Pas d'image</span>
         </div>
         <h2 class="text-xl font-medium text-gray-700 hover:text-gray-800 tracking-tight bg-white bg-opacity-75 p-2 rounded-lg">
           {{ item.name }}

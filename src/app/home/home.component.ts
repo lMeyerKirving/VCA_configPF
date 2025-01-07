@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import {ActivatedRoute, RouterLink} from '@angular/router';
-import {NgForOf, NgIf} from '@angular/common';
+import {NgClass, NgForOf, NgIf} from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import {ServicesComponent} from '../shared/services/services.component';
 
@@ -11,14 +11,15 @@ import {ServicesComponent} from '../shared/services/services.component';
     RouterLink,
     NgForOf,
     NgIf,
-    HttpClientModule
+    HttpClientModule,
+    NgClass
   ],
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
   // Liste des éléments codés en dur
   items: { name: string, link: string, image?: string  }[] = [
-    { name: 'Bague', link: '/bague', image: 'bague-simple.png' },
+    { name: 'Bague', link: '/bague', image: 'baguee.png' },
     { name: 'Bracelet', link: '/bracelet' },
     { name: 'Sautoir', link: '/sautoir' },
     { name: 'Collier', link: '/collier' },
@@ -61,5 +62,6 @@ private initLogin(){
     }
   })
 }
-
+  columns: number = 4;
+  protected readonly Math = Math;
 }
