@@ -1,0 +1,70 @@
+<div class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50" *ngIf="show">
+  <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-6xl">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-2xl font-semibold text-gray-700">Sélectionnez un élément</h2>
+      <button class="text-gray-500 hover:text-gray-700 text-xl" (click)="onClose()">✖</button>
+    </div>
+    <table class="table-auto w-full text-left border-collapse">
+      <thead>
+      <tr class="border-b border-gray-300 text-sm font-medium text-gray-500">
+        <th class="relative py-4 px-2">
+          <span class="block mb-2 text-gray-800 font-semibold">Référence</span>
+          <input
+            type="text"
+            [(ngModel)]="filters['ref_utilisat']"
+            (input)="applyColumnSearch()"
+            class="border-b-2 border-black bg-transparent focus:outline-none focus:ring-0 text-gray-600 w-full"
+          />
+        </th>
+        <th class="relative py-4 px-2">
+          <span class="block mb-2 text-gray-800 font-semibold">Désignation</span>
+          <input
+            type="text"
+            [(ngModel)]="filters['designation']"
+            (input)="applyColumnSearch()"
+            class="border-b-2 border-black bg-transparent focus:outline-none focus:ring-0 text-gray-600 w-full"
+          />
+        </th>
+        <th class="relative py-4 px-2">
+          <span class="block mb-2 text-gray-800 font-semibold">Version</span>
+          <input
+            type="text"
+            [(ngModel)]="filters['version']"
+            (input)="applyColumnSearch()"
+            class="border-b-2 border-black bg-transparent focus:outline-none focus:ring-0 text-gray-600 w-full"
+          />
+        </th>
+        <th class="relative py-4 px-2">
+          <span class="block mb-2 text-gray-800 font-semibold">Révision</span>
+          <input
+            type="text"
+            [(ngModel)]="filters['revision']"
+            (input)="applyColumnSearch()"
+            class="border-b-2 border-black bg-transparent focus:outline-none focus:ring-0 text-gray-600 w-full"
+          />
+        </th>
+        <th class="py-4 px-2 text-center">Action</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr
+        *ngFor="let item of filteredData"
+        class="hover:bg-gray-50 border-b border-gray-200 text-gray-700 text-sm"
+      >
+        <td class="py-3 px-2">{{ item.ref_utilisat }}</td>
+        <td class="py-3 px-2">{{ item.designation }}</td>
+        <td class="py-3 px-2">{{ item.version }}</td>
+        <td class="py-3 px-2">{{ item.revision }}</td>
+        <td class="py-3 px-2 text-center">
+          <button
+            class="bg-[#d1bfa7] text-white text-sm py-1 px-3 rounded hover:bg-[#b5a18c] transition-all"
+            (click)="onSelect(item)"
+          >
+            Sélectionner
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

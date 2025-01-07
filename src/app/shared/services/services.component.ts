@@ -69,5 +69,12 @@ export class ServicesComponent {
     });
   }
 
+  getType(data: string):Observable<any>{
+    const param = "getTypeObject";
+    const url = `${this.audrosServer}${this._baseUrl}${param}@${data}@`;
+    console.log("url", url);
+    return this._http.get<any>(url, {responseType : 'json'});
+  }
+
 
 }

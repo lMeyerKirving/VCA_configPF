@@ -1,24 +1,30 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import {NgForOf} from '@angular/common';
+import {ServicesComponent} from '../shared/services/services.component';
+import {PopupTableComponent} from '../popup-table/popup-table.component';
 
 @Component({
   selector: 'app-creation',
   standalone: true,
   templateUrl: './creation.component.html',
   imports: [
-    NgForOf
+    NgForOf,
+    PopupTableComponent
   ],
   styleUrls: ['./creation.component.css']
 })
 export class CreationComponent {
-  selectedJewelry: string | null = null; // Nom du bijou sélectionné
-  customizationOptions: string[] = []; // Liste des types pour le bijou sélectionné
-  selectedOptions: Record<string, string> = {}; // Choix actuels faits par l'utilisateur
+  selectedJewelry: string | null = null;
+  customizationOptions: string[] = [];
+  selectedOptions: Record<string, string> = {};
+  popupData: any[] = []; // Données pour le tableau dans la pop-up
+  isPopupVisible: boolean = false; // Contrôle de la visibilité de la pop-up
+  currentOption: string | null = null; // Option en cours de personnalisation
 
   private typeMapping: Record<string, string[]> = {
-    'Bague entre les doigts': ['Corps de bague', 'Motif', 'Motif'],
-    'Bague simple': ['Corps de bague', 'Motif'],
+    'Bague entre les doigts': ['corps', 'Motif', 'Motif'],
+    'Bague simple': ['corps', 'motif'],
     'Bracelet ouvert': ['Brin mâle', 'Brin femelle', 'Axe charnière', 'Lame ressort', 'Motif A', 'Motif B'],
     'Bracelet rigide': ['Brin mâle'],
     'Bracelet souple': ['Mousqueton'],
@@ -35,7 +41,7 @@ export class CreationComponent {
     'Sautoir (option 2)': ['Mousqueton'],
   };
 
-  constructor(private route: ActivatedRoute, private router: Router) {
+  constructor(private route: ActivatedRoute, private router: Router, private _ServicesComponent: ServicesComponent) {
     console.log('CreationComponent instantiated');
   }
 
@@ -61,12 +67,34 @@ export class CreationComponent {
   }
 
   onCustomize(option: string): void {
-    // Naviguer ou ouvrir une pop-up pour personnaliser l'option
-    this.router.navigate([`/search/${option}`]);
+    this.currentOption = option;
+    this._ServicesComponent.getType(option).subscribe(
+      (response) => {
+        if (response && response.data) {
+          this.popupData = response.data; // Assurez-vous que popupData est un tableau
+        } else {
+          console.error('Data format incorrect:', response);
+          this.popupData = []; // Assurez-vous de ne pas casser l'interface
+        }
+        this.isPopupVisible = true; // Affichez la pop-up
+      },
+      (error) => {
+        console.error('Erreur lors de la récupération des données', error);
+      }
+    );
   }
 
-  updateSelectedOption(option: string, value: string): void {
-    // Met à jour les informations du bijou en fonction des choix faits
-    this.selectedOptions[option] = value;
+
+  onPopupClose(): void {
+    this.isPopupVisible = false;
+    this.currentOption = null;
   }
+
+  onItemSelect(item: any): void {
+    if (this.currentOption) {
+      this.selectedOptions[this.currentOption] = item.designation; // Met à jour l'option sélectionnée
+    }
+    this.onPopupClose(); // Ferme la pop-up
+  }
+
 }

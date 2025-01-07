@@ -1,15 +1,23 @@
-<div class="container mx-auto p-8">
-  <h1 class="text-4xl font-bold text-center mb-12 text-vc-black">Bienvenue sur le configurateur de bijoux</h1>
+<div class="container mx-auto p-8 bg-gray-50 rounded-lg shadow-lg">
+  <h1 class="text-5xl font-bold text-center mb-12 text-gray-800 tracking-wide">
+    Bienvenue sur le configurateur de bijoux
+  </h1>
   <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-12">
-    <a *ngFor="let item of items" [routerLink]="item.link" class="block bg-vc-white border border-vc rounded-lg shadow-md hover:shadow-lg hover:scale-105 transition-transform duration-300">
+    <a *ngFor="let item of items" [routerLink]="item.link"
+       class="block bg-white border border-gray-300 rounded-lg shadow-md hover:shadow-xl hover:scale-105 transition-transform duration-500">
       <div class="p-8 text-center">
-        <img *ngIf="item.image; else defaultImage" [src]="item.image" alt="{{ item.name }}" class="mx-auto w-32 h-32 object-contain mb-4">
+        <img *ngIf="item.image; else defaultImage"
+             [src]="item.image"
+             alt="{{ item.name }}"
+             class="mx-auto w-32 h-32 object-contain mb-4">
         <ng-template #defaultImage>
-          <div class="w-32 h-32 mx-auto bg-gray-200 flex items-center justify-center rounded-md">
-            <span class="text-gray-500">Pas d'image</span>
+          <div class="w-32 h-32 mx-auto bg-gray-100 flex items-center justify-center rounded-md">
+            <span class="text-gray-400">Pas d'image</span>
           </div>
         </ng-template>
-        <h2 class="text-xl font-medium text-vc-black">{{ item.name }}</h2>
+        <h2 class="text-xl font-medium text-gray-700 hover:text-gray-800 tracking-tight">
+          {{ item.name }}
+        </h2>
       </div>
     </a>
   </div>
