@@ -1,38 +1,43 @@
 <div class="container mx-auto p-8 bg-gray-50 rounded-lg shadow-lg">
-  <h1 class="text-5xl font-bold text-center mb-8 text-gray-800 tracking-wide">
+  <!-- Titre principal -->
+  <h1 class="text-5xl font-bold text-center mb-12 text-gray-800 tracking-wide">
     {{ selectedJewelry }}
   </h1>
 
-  <!-- Encadré des informations -->
-  <div class="border border-gray-300 rounded-lg p-6 bg-white mb-8 shadow-md">
-    <h2 class="text-2xl font-semibold mb-4 text-gray-700">Informations du bijou</h2>
-    <ul class="text-gray-600">
-      <li *ngFor="let option of customizationOptions" class="mb-2">
-        <strong class="text-gray-800">{{ option }}:</strong> {{ selectedOptions[option] || 'Non défini' }}
+  <!-- Liste verticale centrée -->
+  <div class="bg-white rounded-lg shadow-md p-8 max-w-3xl mx-auto">
+    <ul class="space-y-6">
+      <li *ngFor="let option of customizationOptions" class="flex items-center space-x-6 border-b pb-4">
+        <!-- Bouton pour personnaliser -->
+        <button
+          class="bg-[#d1bfa7] text-white py-2 w-64 rounded-lg hover:bg-[#b5a18c] transition-all shadow-md text-lg font-semibold text-center"
+          (click)="onCustomize(option)">
+          {{ option }}
+        </button>
+        <!-- Détails de l'attribut -->
+        <div>
+          <p *ngIf="selectedOptions[option]" class="text-gray-700">
+             {{ selectedOptions[option].reference }} -
+             {{ selectedOptions[option].designation }}
+          </p>
+          <p *ngIf="!selectedOptions[option]" class="text-gray-500 italic">
+            Non défini
+          </p>
+        </div>
       </li>
     </ul>
   </div>
 
-  <!-- Liste des outils de personnalisation -->
-  <h2 class="text-2xl font-semibold mb-4 text-gray-700">Personnaliser</h2>
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-    <button *ngFor="let option of customizationOptions"
-            class="bg-[#d1bfa7] text-white py-2 px-4 rounded-lg hover:bg-[#b5a18c] transition-all shadow-md"
-            (click)="onCustomize(option)">
-      {{ option }}
-    </button>
-  </div>
-
   <!-- Bouton Enregistrer -->
-  <div class="flex justify-center mt-8">
+  <div class="flex justify-center mt-12">
     <button
-      class="bg-[#006F62] text-white py-2 px-6 rounded-lg hover:bg-[#00564C] shadow-md transition-all text-lg font-semibold"
+      class="bg-[#006F62] text-white py-3 px-12 rounded-lg hover:bg-[#00564C] shadow-md transition-all text-lg font-semibold"
       (click)="onSave()">
       Enregistrer
     </button>
   </div>
 
-
+  <!-- Popup Table -->
   <app-popup-table
     [data]="popupData"
     [show]="isPopupVisible"

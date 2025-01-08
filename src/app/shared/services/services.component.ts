@@ -1,6 +1,7 @@
 import { Injectable} from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import {data} from 'autoprefixer';
 
 
 @Injectable({
@@ -69,6 +70,13 @@ export class ServicesComponent {
     });
   }
 
+  getItem(data: string):Observable<any>{
+    const param = "getItem";
+    const url = `${this.audrosServer}${this._baseUrl}${param}@${data}@`;
+    console.log("url", url);
+    return this._http.get<any>(url, {responseType : 'json'});
+  }
+
   getType(data: string):Observable<any>{
     const param = "getTypeObject";
     const url = `${this.audrosServer}${this._baseUrl}${param}@${data}@`;
@@ -76,5 +84,11 @@ export class ServicesComponent {
     return this._http.get<any>(url, {responseType : 'json'});
   }
 
+  updateItem(data: string):Observable<any>{
+    const param = "updateItem";
+    const url = `${this.audrosServer}${this._baseUrl}${param}@${data}@`;
+    console.log("url", url);
+    return this._http.get<any>(url, {responseType : 'json'});
+  }
 
 }

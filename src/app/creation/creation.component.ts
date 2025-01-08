@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import {NgForOf} from '@angular/common';
+import {NgForOf, NgIf} from '@angular/common';
 import {ServicesComponent} from '../shared/services/services.component';
 import {PopupTableComponent} from '../popup-table/popup-table.component';
 
@@ -10,14 +10,16 @@ import {PopupTableComponent} from '../popup-table/popup-table.component';
   templateUrl: './creation.component.html',
   imports: [
     NgForOf,
-    PopupTableComponent
+    PopupTableComponent,
+    NgIf
   ],
   styleUrls: ['./creation.component.css']
 })
 export class CreationComponent {
   selectedJewelry: string | null = null;
   customizationOptions: string[] = [];
-  selectedOptions: Record<string, string> = {};
+  selectedOptions: Record<string, { designation: string; reference: string }> = {};
+
   popupData: any[] = []; // Données pour le tableau dans la pop-up
   isPopupVisible: boolean = false; // Contrôle de la visibilité de la pop-up
   currentOption: string | null = null; // Option en cours de personnalisation
@@ -46,14 +48,36 @@ export class CreationComponent {
   }
 
   ngOnInit(): void {
-    console.log('ngOnInit called'); // Vérifiez que cette méthode est bien appelée
+    console.log('ngOnInit called');
 
     this.route.queryParamMap.subscribe(params => {
-      this.selectedJewelry = params.get('jewelry'); // Récupère le paramètre de la query string
-      console.log('Selected Jewelry:', this.selectedJewelry); // Vérifiez la valeur
+      this.selectedJewelry = params.get('jewelry'); // Récupérer le bijou sélectionné
+      const option = params.get('option'); // Attribut en cours
+      const selectedDesignation = params.get('selectedDesignation'); // Désignation sélectionnée
+      const selectedReference = params.get('selectedReference'); // Référence sélectionnée
+      const savedState = params.get('state'); // État précédent
+
+      console.log('Query Params:', { option, selectedDesignation, selectedReference, savedState });
+
+      // Restaurer l'état précédent s'il existe
+      if (savedState) {
+        this.selectedOptions = JSON.parse(savedState);
+      }
+
+      // Mettre à jour l'attribut sélectionné si applicable
+      if (option && selectedDesignation && selectedReference) {
+        this.selectedOptions[option] = {
+          designation: selectedDesignation,
+          reference: selectedReference,
+        };
+      }
+
       this.loadCustomizationOptions();
     });
   }
+
+
+
 
 
   loadCustomizationOptions(): void {
@@ -66,7 +90,7 @@ export class CreationComponent {
     console.log('Customization Options:', this.customizationOptions); // Log les options
   }
 
-  onCustomize(option: string): void {
+  /*onCustomize(option: string): void {
     this.currentOption = option;
     this._ServicesComponent.getType(option).subscribe(
       (response) => {
@@ -82,7 +106,19 @@ export class CreationComponent {
         console.error('Erreur lors de la récupération des données', error);
       }
     );
+  }*/
+
+  onCustomize(option: string): void {
+    this.router.navigate(['/selection'], {
+      queryParams: {
+        jewelry: this.selectedJewelry, // Garder le bijou sélectionné
+        option, // Attribut actuel
+        state: JSON.stringify(this.selectedOptions) // Sauvegarder l'état des options
+      }
+    });
   }
+
+
 
 
   onPopupClose(): void {

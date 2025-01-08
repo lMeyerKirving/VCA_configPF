@@ -8,7 +8,11 @@ export const routes: Routes = [
     path: 'creation',
     loadComponent: () => import('./creation/creation.component').then(m => m.CreationComponent),
   },
+  {
+    path: 'selection',
+    loadComponent: () => import('./selection-page/selection-page.component').then(m => m.SelectionPageComponent),
+  },
   { path: ':item', component: DetailsComponent },
-
 ];
+
 
