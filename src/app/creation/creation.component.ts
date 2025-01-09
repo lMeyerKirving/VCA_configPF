@@ -18,10 +18,10 @@ import {PopupTableComponent} from '../popup-table/popup-table.component';
 
 
 export class CreationComponent {
-  private num_art = "38242";
-  private sessionID = "bhd6414bdc480";
+  private num_art = "";
+  private sessionID = "";
 
-  itemInfo: { ref_utilisat: string; version: string; revision: string; designation: string } | null = null;
+  itemInfo: { titrePage: string } | null = null;
 
 
   selectedJewelry: string | null = null;
@@ -60,29 +60,25 @@ export class CreationComponent {
 
     this.initLogin();
 
-    this._ServicesComponent.getItem(this.num_art).subscribe({
-      next: (response) => {
-        if (response && response.data && response.data.length > 0) {
-          // Stockez la première ligne des résultats
-          this.itemInfo = response.data[0];
-          console.log('Item Info:', this.itemInfo);
-        } else {
-          console.warn('Aucune donnée trouvée pour cet objet');
-        }
-      },
-      error: (error) => {
-        console.error('Erreur lors de la récupération des informations de l\'objet :', error);
-      }
-    });
-
+    // Récupérer et stocker les paramètres de l'URL (sessionID et objectID)
     this.route.queryParamMap.subscribe(params => {
+      const sessionID = params.get('sessionID'); // Récupérer sessionID
+      const objectID = params.get('objectID'); // Récupérer objectID
       this.selectedJewelry = params.get('jewelry'); // Récupérer le bijou sélectionné
       const option = params.get('option'); // Attribut en cours
       const selectedDesignation = params.get('selectedDesignation'); // Désignation sélectionnée
       const selectedReference = params.get('selectedReference'); // Référence sélectionnée
       const savedState = params.get('state'); // État précédent
 
-      console.log('Query Params:', { option, selectedDesignation, selectedReference, savedState });
+      console.log('Query Params:', { sessionID, objectID, option, selectedDesignation, selectedReference, savedState });
+
+      // Vérifier si sessionID et objectID sont présents, sinon journaliser une erreur
+      if (!sessionID || !objectID) {
+        console.error('Paramètres sessionID ou objectID manquants');
+      } else {
+        console.log('Session ID:', sessionID);
+        console.log('Object ID:', objectID);
+      }
 
       // Restaurer l'état précédent s'il existe
       if (savedState) {
@@ -98,8 +94,25 @@ export class CreationComponent {
       }
 
       this.loadCustomizationOptions();
+
+      // Appeler le backend pour récupérer les informations de l'objet avec objectID
+      this._ServicesComponent.getItem(objectID!).subscribe({
+        next: (response) => {
+          if (response && response.data && response.data.length > 0) {
+            // Stockez la première ligne des résultats
+            this.itemInfo = response.data[0];
+            console.log('Item Info:', this.itemInfo);
+          } else {
+            console.warn('Aucune donnée trouvée pour cet objet');
+          }
+        },
+        error: (error) => {
+          console.error('Erreur lors de la récupération des informations de l\'objet :', error);
+        }
+      });
     });
   }
+
 
 
   private initLogin(): void {
@@ -110,13 +123,13 @@ export class CreationComponent {
 
     // Extraction de l'origine (protocole + nom de domaine)
     const baseUrl = `${urlObject.origin}/`; // Exemple : "https://dms-server/"
-    //this._ServicesComponent.audrosServer = baseUrl;
+    this._ServicesComponent.audrosServer = baseUrl;
 
     // Extraction des paramètres de requête
     const queryParams = new URLSearchParams(urlObject.search);
     this.route.queryParamMap.subscribe(params => {
-      //this.num_art = queryParams.get('objectID') || "";
-      //this.sessionID = queryParams.get('sessionID') || "";
+      this.num_art = queryParams.get('objectID') || "";
+      this.sessionID = queryParams.get('sessionID') || "";
     });
 
     console.log('Base URL :', baseUrl);
@@ -166,14 +179,21 @@ export class CreationComponent {
   }*/
 
   onCustomize(option: string): void {
+    const queryParams = new URLSearchParams(window.location.search);
+    const sessionID = queryParams.get('sessionID');
+    const objectID = queryParams.get('objectID');
+
     this.router.navigate(['/selection'], {
       queryParams: {
         jewelry: this.selectedJewelry, // Garder le bijou sélectionné
         option, // Attribut actuel
-        state: JSON.stringify(this.selectedOptions) // Sauvegarder l'état des options
+        state: JSON.stringify(this.selectedOptions), // Sauvegarder l'état des options
+        sessionID, // Ajouter sessionID
+        objectID // Ajouter objectID
       }
     });
   }
+
 
 
 

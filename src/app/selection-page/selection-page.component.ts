@@ -24,12 +24,16 @@ export class SelectionPageComponent {
     revision: ''
   }; // Filtres pour les colonnes
   currentOption: string | null = null;
+  sessionID: string | null = null; // Stocker sessionID
+  objectID: string | null = null; // Stocker objectID
 
   constructor(private route: ActivatedRoute, private router: Router, private services: ServicesComponent) {}
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       this.currentOption = params['option']; // Récupérer l'attribut cliqué
+      this.sessionID = params['sessionID']; // Récupérer sessionID
+      this.objectID = params['objectID']; // Récupérer objectID
       if (this.currentOption) {
         this.fetchData(this.currentOption);
       }
@@ -74,7 +78,9 @@ export class SelectionPageComponent {
         option: this.currentOption, // Attribut actuel
         selectedDesignation: item.designation, // Élément sélectionné (désignation)
         selectedReference: item.ref_utilisat, // Élément sélectionné (référence)
-        state: savedState // Conserver l'état précédent
+        state: savedState, // Conserver l'état précédent
+        sessionID: this.sessionID, // Ajouter sessionID
+        objectID: this.objectID // Ajouter objectID
       }
     });
   }

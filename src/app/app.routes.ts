@@ -5,12 +5,25 @@ import { DetailsComponent } from './details/details.component';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: '/creation?jewelry=Bracelet%20ouvert',
-    pathMatch: 'full' // Redirige par défaut vers la page creation
+    pathMatch: 'full',
+    redirectTo: () => {
+      // Récupération des paramètres de l'URL actuelle
+      const queryParams = new URLSearchParams(window.location.search);
+      const sessionID = queryParams.get('sessionID');
+      const objectID = queryParams.get('objectID');
+
+      if (sessionID && objectID) {
+        // Redirige vers la page creation avec les paramètres conservés
+        return `/creation?jewelry=Bracelet%20ouvert&sessionID=${sessionID}&objectID=${objectID}`;
+      }
+
+      // Si les paramètres sont absents, redirige vers la page Home
+      return '/home';
+    }
   },
   {
     path: 'home',
-    component: HomeComponent // Permet d'accéder à la page Home avec /home
+    component: HomeComponent
   },
   {
     path: 'creation',
@@ -20,8 +33,5 @@ export const routes: Routes = [
     path: 'selection',
     loadComponent: () => import('./selection-page/selection-page.component').then(m => m.SelectionPageComponent),
   },
-  {
-    path: ':item',
-    component: DetailsComponent
-  },
+  { path: ':item', component: DetailsComponent },
 ];

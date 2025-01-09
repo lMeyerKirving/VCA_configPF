@@ -9,7 +9,7 @@ import {data} from 'autoprefixer';
 })
 
 export class ServicesComponent {
-  public audrosServer = `https://dms-server/`;
+  public audrosServer = ``;
   private _audrosSession: (string | undefined);
   public user = "audros";
   public psw = "aupwd";
@@ -52,7 +52,7 @@ export class ServicesComponent {
             this._sessionId = resultElement.textContent || "";
             console.log("Connected with session: ", this._sessionId);
             this.connected.next(true);
-            this._baseUrl = `cocoon/View/ExecuteService/fr/AW_AuplResult3.text?${this.authInfos}${this._sessionId}&ServiceSubPackage=mehdi&ServiceName=Bijoux.au&ServiceParameters=`;
+            this._baseUrl = `cocoon/View/ExecuteService/fr/AW_AuplResult3.text?${this.authInfos}${this._sessionId}&ServiceSubPackage=customer/Apps/ConfigPF&ServiceName=WS_configPF.au&ServiceParameters=`;
             console.log("url base est : ", this._baseUrl)
 
           } else {
@@ -72,7 +72,7 @@ export class ServicesComponent {
 
    log(sessionID: string): Observable<any> {
 
-    this._baseUrl = `cocoon/View/ExecuteService/fr/AW_AuplResult3.text?${this.authInfos}${sessionID}&ServiceSubPackage=mehdi&ServiceName=Bijoux.au&ServiceParameters=`;
+    this._baseUrl = `cocoon/View/ExecuteService/fr/AW_AuplResult3.text?${this.authInfos}${sessionID}&ServiceSubPackage=customer/Apps/ConfigPF&ServiceName=WS_configPF.au&ServiceParameters=`;
     console.log("url base est : ", this._baseUrl);
     const param = "login";
     const data = "";
