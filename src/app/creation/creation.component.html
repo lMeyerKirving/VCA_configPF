@@ -4,6 +4,15 @@
     {{ selectedJewelry }}
   </h1>
 
+  <div *ngIf="itemInfo" class="text-center text-gray-500 text-sm mt-4">
+    <p>
+      <strong>Référence :</strong> {{ itemInfo.ref_utilisat }} |
+      <strong>Version :</strong> {{ itemInfo.version }} |
+      <strong>Révision :</strong> {{ itemInfo.revision }}
+    </p>
+  </div>
+
+
   <!-- Liste verticale centrée -->
   <div class="bg-white rounded-lg shadow-md p-8 max-w-3xl mx-auto">
     <ul class="space-y-6">

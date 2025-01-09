@@ -11,7 +11,6 @@ import { ServicesComponent } from '../shared/services/services.component';
   standalone: true,
   imports: [
     NgForOf,
-    NgIf,
     FormsModule,
   ]
 })

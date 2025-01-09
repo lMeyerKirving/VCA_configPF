@@ -15,7 +15,15 @@ import {PopupTableComponent} from '../popup-table/popup-table.component';
   ],
   styleUrls: ['./creation.component.css']
 })
+
+
 export class CreationComponent {
+  private num_art = "38242";
+  private sessionID = "bhd6414bdc480";
+
+  itemInfo: { ref_utilisat: string; version: string; revision: string; designation: string } | null = null;
+
+
   selectedJewelry: string | null = null;
   customizationOptions: string[] = [];
   selectedOptions: Record<string, { designation: string; reference: string }> = {};
@@ -50,6 +58,23 @@ export class CreationComponent {
   ngOnInit(): void {
     console.log('ngOnInit called');
 
+    this.initLogin();
+
+    this._ServicesComponent.getItem(this.num_art).subscribe({
+      next: (response) => {
+        if (response && response.data && response.data.length > 0) {
+          // Stockez la première ligne des résultats
+          this.itemInfo = response.data[0];
+          console.log('Item Info:', this.itemInfo);
+        } else {
+          console.warn('Aucune donnée trouvée pour cet objet');
+        }
+      },
+      error: (error) => {
+        console.error('Erreur lors de la récupération des informations de l\'objet :', error);
+      }
+    });
+
     this.route.queryParamMap.subscribe(params => {
       this.selectedJewelry = params.get('jewelry'); // Récupérer le bijou sélectionné
       const option = params.get('option'); // Attribut en cours
@@ -77,7 +102,39 @@ export class CreationComponent {
   }
 
 
+  private initLogin(): void {
+    console.log("initLogin is running!");
+    // Récupération de l'URL complète
+    const currentUrl = window.location.href;
+    const urlObject = new URL(currentUrl);
 
+    // Extraction de l'origine (protocole + nom de domaine)
+    const baseUrl = `${urlObject.origin}/`; // Exemple : "https://dms-server/"
+    //this._ServicesComponent.audrosServer = baseUrl;
+
+    // Extraction des paramètres de requête
+    const queryParams = new URLSearchParams(urlObject.search);
+    this.route.queryParamMap.subscribe(params => {
+      //this.num_art = queryParams.get('objectID') || "";
+      //this.sessionID = queryParams.get('sessionID') || "";
+    });
+
+    console.log('Base URL :', baseUrl);
+    console.log('sessionID:', this.sessionID);
+    console.log('ref_pere (objectID):', this.num_art);
+
+    this._ServicesComponent.log(this.sessionID).subscribe({
+      next: (data) => {
+        if (data) {
+          console.log("Autologin successful, data is:", data);
+        }
+      },
+      error: (error) => {
+        console.error("Autologin failed:", error);
+      }
+    });
+
+  }
 
 
   loadCustomizationOptions(): void {

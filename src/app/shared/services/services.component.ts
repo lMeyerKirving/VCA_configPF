@@ -70,6 +70,18 @@ export class ServicesComponent {
     });
   }
 
+   log(sessionID: string): Observable<any> {
+
+    this._baseUrl = `cocoon/View/ExecuteService/fr/AW_AuplResult3.text?${this.authInfos}${sessionID}&ServiceSubPackage=mehdi&ServiceName=Bijoux.au&ServiceParameters=`;
+    console.log("url base est : ", this._baseUrl);
+    const param = "login";
+    const data = "";
+
+    const url = `${this.audrosServer}${this._baseUrl}${param}@${data}@`;
+
+    return this._http.get(url, {responseType: 'text'});
+  }
+
   getItem(data: string):Observable<any>{
     const param = "getItem";
     const url = `${this.audrosServer}${this._baseUrl}${param}@${data}@`;
