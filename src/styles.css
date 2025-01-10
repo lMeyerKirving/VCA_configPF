@@ -3,11 +3,24 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Appliquer Roboto à tout le texte par défaut */
 body {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Times New Roman', sans-serif;
   color: #333333;
   background-color: #f8f8f8;
 }
+
+/* Appliquer Playfair Display uniquement aux titres */
+h1, h2, h3, h4, h5, h6, .font-title {
+  font-family: 'Playfair Display', serif;
+}
+
+/* Forcer une taille uniforme pour les chiffres */
+.numbers, td, th {
+  font-variant-numeric: tabular-nums;
+  font-family: 'Times New Roman', sans-serif;
+}
+
 
 .text-vc-black {
   color: #1a1a1a;
