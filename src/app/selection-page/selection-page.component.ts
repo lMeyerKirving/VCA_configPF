@@ -78,6 +78,7 @@ export class SelectionPageComponent {
         option: this.currentOption, // Attribut actuel
         selectedDesignation: item.designation, // Élément sélectionné (désignation)
         selectedReference: item.ref_utilisat, // Élément sélectionné (référence)
+        selectedNumArt: item.num_art, // Num_art récupéré
         state: savedState, // Conserver l'état précédent
         sessionID: this.sessionID, // Ajouter sessionID
         objectID: this.objectID // Ajouter objectID

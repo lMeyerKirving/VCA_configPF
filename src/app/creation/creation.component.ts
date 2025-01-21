@@ -26,7 +26,7 @@ export class CreationComponent {
 
   selectedJewelry: string | null = null;
   customizationOptions: string[] = [];
-  selectedOptions: Record<string, { designation: string; reference: string }> = {};
+  selectedOptions: Record<string, { designation: string; reference: string; num_art: string }> = {};
 
   popupData: any[] = []; // Données pour le tableau dans la pop-up
   isPopupVisible: boolean = false; // Contrôle de la visibilité de la pop-up
@@ -68,6 +68,7 @@ export class CreationComponent {
       const option = params.get('option'); // Attribut en cours
       const selectedDesignation = params.get('selectedDesignation'); // Désignation sélectionnée
       const selectedReference = params.get('selectedReference'); // Référence sélectionnée
+      const selectedNumArt = params.get('selectedNumArt'); // Récupérer num_art
       const savedState = params.get('state'); // État précédent
 
       console.log('Query Params:', { sessionID, objectID, option, selectedDesignation, selectedReference, savedState });
@@ -86,10 +87,11 @@ export class CreationComponent {
       }
 
       // Mettre à jour l'attribut sélectionné si applicable
-      if (option && selectedDesignation && selectedReference) {
+      if (option && selectedDesignation && selectedReference  && selectedNumArt) {
         this.selectedOptions[option] = {
           designation: selectedDesignation,
           reference: selectedReference,
+          num_art: selectedNumArt,
         };
       }
 
@@ -211,8 +213,35 @@ export class CreationComponent {
     this.onPopupClose(); // Ferme la pop-up
   }
 
-  onSave(){
-    return;
+  onSave(): void {
+    console.log('Saving attributes and creating links...');
+
+    for (const [attribute, value] of Object.entries(this.selectedOptions)) {
+      if (value && value.num_art) {
+        const linkData = {
+          linkClass: 'SYS_mBOM', // Classe du lien
+          parentID: '42060', // ID du parent codé en dur pour l'instant
+          childID: value.num_art, // ID de l'attribut sélectionné
+          quantity: 0, // Quantité
+          flag: '', // Flag vide
+          ordre: '1', // Ordre
+        };
+
+        console.log(value.num_art);
+
+        this._ServicesComponent.addNewLink(linkData).subscribe({
+          next: (response) => {
+            console.log(`Link created successfully for attribute ${attribute}:`, response);
+          },
+          error: (error) => {
+            console.error(`Error creating link for attribute ${attribute}:`, error);
+          },
+        });
+      } else {
+        console.warn(`Attribute ${attribute} is missing num_art and will not be linked.`);
+      }
+    }
   }
+
 
 }

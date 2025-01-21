@@ -106,11 +106,14 @@ export class ServicesComponent {
     return this._http.get<any>(url, {responseType : 'json'});
   }
 
-  updateItem(data: string):Observable<any>{
-    const param = "updateItem";
-    const url = `${this.audrosServer}${this._baseUrl}${param}@${data}@`;
-    console.log("url", url);
-    return this._http.get<any>(url, {responseType : 'json'});
+  addNewLink(linkData: { linkClass: string, parentID: string, childID: string, quantity: number, flag: string, ordre: string }): Observable<any> {
+    const param = "AddNewLink";
+    const data = `${linkData.linkClass};${linkData.parentID};${linkData.childID};${linkData.quantity};${linkData.flag};${linkData.ordre}`;
+    const url = `${this.audrosServer}${this._baseUrl}${param}@${data}`;
+
+    console.log("URL d'ajout de lien :", url);
+
+    return this._http.get<any>(url, { responseType: 'json' });
   }
 
 }

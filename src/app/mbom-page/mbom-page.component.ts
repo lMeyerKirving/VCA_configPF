@@ -14,7 +14,7 @@ import {NgForOf} from '@angular/common';
 })
 export class MBOMPageComponent implements OnInit {
   mboms: any[] = [];
-  numArt: string | null = '41329';
+  numArt: string | null = '42062';
 
   constructor(
     private route: ActivatedRoute,
