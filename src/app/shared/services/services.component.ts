@@ -9,7 +9,7 @@ import {data} from 'autoprefixer';
 })
 
 export class ServicesComponent {
-  public audrosServer = ``;
+  public audrosServer = `https://dms-server/`;
   private _audrosSession: (string | undefined);
   public user = "audros";
   public psw = "aupwd";
@@ -55,6 +55,7 @@ export class ServicesComponent {
             this._baseUrl = `cocoon/View/ExecuteService/fr/AW_AuplResult3.text?${this.authInfos}${this._sessionId}&ServiceSubPackage=customer/Apps/ConfigPF&ServiceName=WS_configPF.au&ServiceParameters=`;
             console.log("url base est : ", this._baseUrl)
 
+
           } else {
             console.error("Autologin failed: Unable to extract session id from XML");
           }
@@ -91,6 +92,15 @@ export class ServicesComponent {
 
   getType(data: string):Observable<any>{
     const param = "getTypeObject";
+    const url = `${this.audrosServer}${this._baseUrl}${param}@${data}@`;
+    console.log("url", url);
+    return this._http.get<any>(url, {responseType : 'json'});
+  }
+
+  getMBOM(data: string):Observable<any>{
+    const param = "getMBOM";
+    console.log("getMbomaudrosServer",this.audrosServer)
+    console.log("getMbom_baseUrl",this._baseUrl)
     const url = `${this.audrosServer}${this._baseUrl}${param}@${data}@`;
     console.log("url", url);
     return this._http.get<any>(url, {responseType : 'json'});

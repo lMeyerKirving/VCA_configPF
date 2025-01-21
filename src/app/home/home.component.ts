@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {ActivatedRoute, RouterLink} from '@angular/router';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {NgClass, NgForOf, NgIf} from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import {ServicesComponent} from '../shared/services/services.component';
@@ -40,7 +40,11 @@ export class HomeComponent {
 
   selectedItem: string | null = null;
 
-  constructor(private route: ActivatedRoute, private _ServicesComponent: ServicesComponent) {}
+  columns: number = 4;
+  protected readonly Math = Math;
+
+
+  constructor(private route: ActivatedRoute, private _ServicesComponent: ServicesComponent, private router: Router) {}
 
   ngOnInit(): void {
 
@@ -62,6 +66,10 @@ private initLogin(){
     }
   })
 }
-  columns: number = 4;
-  protected readonly Math = Math;
+
+  navigateToMBOM(): void {
+    // Navigation vers la page MBOM
+    this.router.navigate(['/mbom']);
+  }
+
 }

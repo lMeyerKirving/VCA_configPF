@@ -122,7 +122,8 @@ export class CreationComponent {
     const urlObject = new URL(currentUrl);
 
     // Extraction de l'origine (protocole + nom de domaine)
-    const baseUrl = `${urlObject.origin}/`; // Exemple : "https://dms-server/"
+    //const baseUrl = `${urlObject.origin}/`; // Exemple : "https://dms-server/"
+    const baseUrl = `https://dms-server/`;
     this._ServicesComponent.audrosServer = baseUrl;
 
     // Extraction des paramètres de requête
@@ -136,16 +137,16 @@ export class CreationComponent {
     console.log('sessionID:', this.sessionID);
     console.log('ref_pere (objectID):', this.num_art);
 
-    this._ServicesComponent.log(this.sessionID).subscribe({
-      next: (data) => {
-        if (data) {
-          console.log("Autologin successful, data is:", data);
-        }
-      },
-      error: (error) => {
-        console.error("Autologin failed:", error);
-      }
-    });
+    // this._ServicesComponent.log(this.sessionID).subscribe({
+    //   next: (data) => {
+    //     if (data) {
+    //       console.log("Autologin successful, data is:", data);
+    //     }
+    //   },
+    //   error: (error) => {
+    //     console.error("Autologin failed:", error);
+    //   }
+    // });
 
   }
 

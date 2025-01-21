@@ -1,0 +1,15 @@
+.container {
+  background-color: #f8f8f8;
+}
+
+h1 {
+  font-family: 'Playfair Display', serif;
+}
+
+.card {
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}

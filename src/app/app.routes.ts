@@ -33,5 +33,9 @@ export const routes: Routes = [
     path: 'selection',
     loadComponent: () => import('./selection-page/selection-page.component').then(m => m.SelectionPageComponent),
   },
+  {
+    path: 'mbom',
+    loadComponent: () => import('./mbom-page/mbom-page.component').then((m) => m.MBOMPageComponent),
+  },
   { path: ':item', component: DetailsComponent },
 ];
