@@ -26,6 +26,7 @@ export class SelectionPageComponent {
   currentOption: string | null = null;
   sessionID: string | null = null; // Stocker sessionID
   objectID: string | null = null; // Stocker objectID
+  num_art: string | null = null;
 
   constructor(private route: ActivatedRoute, private router: Router, private services: ServicesComponent) {}
 
@@ -34,6 +35,7 @@ export class SelectionPageComponent {
       this.currentOption = params['option']; // Récupérer l'attribut cliqué
       this.sessionID = params['sessionID']; // Récupérer sessionID
       this.objectID = params['objectID']; // Récupérer objectID
+      this.num_art = params['num_art']
       if (this.currentOption) {
         this.fetchData(this.currentOption);
       }
@@ -81,7 +83,8 @@ export class SelectionPageComponent {
         selectedNumArt: item.num_art, // Num_art récupéré
         state: savedState, // Conserver l'état précédent
         sessionID: this.sessionID, // Ajouter sessionID
-        objectID: this.objectID // Ajouter objectID
+        objectID: this.objectID, // Ajouter objectID
+        num_art: this.num_art,
       }
     });
   }

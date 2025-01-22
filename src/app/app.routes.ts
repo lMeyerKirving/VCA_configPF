@@ -7,23 +7,20 @@ export const routes: Routes = [
     path: '',
     pathMatch: 'full',
     redirectTo: () => {
-      // Récupération des paramètres de l'URL actuelle
       const queryParams = new URLSearchParams(window.location.search);
       const sessionID = queryParams.get('sessionID');
       const objectID = queryParams.get('objectID');
 
       if (sessionID && objectID) {
-        // Redirige vers la page creation avec les paramètres conservés
-        return `/creation?jewelry=Bracelet%20ouvert&sessionID=${sessionID}&objectID=${objectID}`;
+        return `/mbom?sessionID=${sessionID}&objectID=${objectID}`;
       }
 
-      // Si les paramètres sont absents, redirige vers la page Home
       return '/home';
-    }
+    },
   },
   {
     path: 'home',
-    component: HomeComponent
+    component: HomeComponent,
   },
   {
     path: 'creation',
@@ -35,7 +32,10 @@ export const routes: Routes = [
   },
   {
     path: 'mbom',
-    loadComponent: () => import('./mbom-page/mbom-page.component').then((m) => m.MBOMPageComponent),
+    loadComponent: () => import('./mbom-page/mbom-page.component').then(m => m.MBOMPageComponent),
   },
-  { path: ':item', component: DetailsComponent },
+  {
+    path: ':item',
+    component: DetailsComponent,
+  },
 ];

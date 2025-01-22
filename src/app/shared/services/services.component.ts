@@ -9,7 +9,7 @@ import {data} from 'autoprefixer';
 })
 
 export class ServicesComponent {
-  public audrosServer = `https://dms-server/`;
+  public audrosServer = ``;
   private _audrosSession: (string | undefined);
   public user = "audros";
   public psw = "aupwd";
@@ -97,14 +97,16 @@ export class ServicesComponent {
     return this._http.get<any>(url, {responseType : 'json'});
   }
 
-  getMBOM(data: string):Observable<any>{
+  getMBOM(numArt: string): Observable<any> {
     const param = "getMBOM";
-    console.log("getMbomaudrosServer",this.audrosServer)
-    console.log("getMbom_baseUrl",this._baseUrl)
+    const data = `${numArt}`;
     const url = `${this.audrosServer}${this._baseUrl}${param}@${data}@`;
-    console.log("url", url);
-    return this._http.get<any>(url, {responseType : 'json'});
+
+    console.log("Fetching MBOM from URL:", url);
+
+    return this._http.get<any>(url, { responseType: 'json' });
   }
+
 
   addNewLink(linkData: { linkClass: string, parentID: string, childID: string, quantity: number, flag: string, ordre: string }): Observable<any> {
     const param = "AddNewLink";
@@ -114,6 +116,16 @@ export class ServicesComponent {
     console.log("URL d'ajout de lien :", url);
 
     return this._http.get<any>(url, { responseType: 'json' });
+  }
+
+  ensureLoggedIn(sessionID: string): Observable<any> {
+    if (!this._sessionId) {
+      return this.log(sessionID);
+    }
+    return new Observable(observer => {
+      observer.next(true);
+      observer.complete();
+    });
   }
 
 }
