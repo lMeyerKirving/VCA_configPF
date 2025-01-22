@@ -20,6 +20,7 @@
   export class CreationComponent {
     private num_art = "";
     private sessionID = "";
+    private objectID = "";
 
     itemInfo: { titrePage: string } | null = null;
 
@@ -87,6 +88,10 @@
         } else {
           console.log('Session ID:', sessionID);
           console.log('Object ID:', objectID);
+
+          if (!this.itemInfo) {
+            this.fetchItemInfo(objectID);
+          }
         }
 
         // Restaurer l'état précédent s'il existe
@@ -193,6 +198,8 @@
       const queryParams = new URLSearchParams(window.location.search);
       const sessionID = queryParams.get('sessionID');
       const objectID = queryParams.get('objectID');
+      this.objectID = objectID || '';
+      this.sessionID = sessionID || '';
 
       this.router.navigate(['/selection'], {
         queryParams: {
@@ -200,7 +207,7 @@
           option,
           state: JSON.stringify(this.selectedOptions),
           sessionID: this.sessionID, // Transmettre sessionID
-          objectID: this.num_art, // Transmettre objectID
+          objectID: this.objectID, // Transmettre objectID
           num_art: this.num_art, // Transmettre num_art
         },
       });
@@ -229,7 +236,7 @@
         if (value && value.num_art) {
           const linkData = {
             linkClass: 'SYS_mBOM', // Classe du lien
-            parentID: '42060', // ID du parent codé en dur pour l'instant
+            parentID: this.num_art, // ID du parent (la nomenclature)
             childID: value.num_art, // ID de l'attribut sélectionné
             quantity: 0, // Quantité
             flag: '', // Flag vide
@@ -250,6 +257,22 @@
           console.warn(`Attribute ${attribute} is missing num_art and will not be linked.`);
         }
       }
+    }
+
+    private fetchItemInfo(objectID: string): void {
+      this._ServicesComponent.getItem(objectID).subscribe({
+        next: (response) => {
+          if (response && response.data && response.data.length > 0) {
+            this.itemInfo = response.data[0];
+            console.log('Item Info reloaded:', this.itemInfo);
+          } else {
+            console.warn('Aucune donnée trouvée pour cet objet');
+          }
+        },
+        error: (error) => {
+          console.error('Erreur lors de la récupération des informations de l\'objet :', error);
+        },
+      });
     }
 
 

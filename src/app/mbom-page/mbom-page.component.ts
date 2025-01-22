@@ -26,7 +26,7 @@ export class MBOMPageComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.queryParamMap.subscribe((params) => {
-      this.objectID = '43630';
+      this.objectID = params.get('objectID');
       this.sessionID = params.get('sessionID');
 
 

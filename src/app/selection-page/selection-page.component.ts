@@ -85,6 +85,7 @@ export class SelectionPageComponent {
         sessionID: this.sessionID, // Ajouter sessionID
         objectID: this.objectID, // Ajouter objectID
         num_art: this.num_art,
+
       }
     });
   }
