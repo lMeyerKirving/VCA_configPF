@@ -12,25 +12,25 @@
     </p>
   </div>
 
-  <!-- Liste verticale centrée -->
+  <!-- Liste des attributs dynamiques -->
   <div class="bg-white rounded-lg shadow-md p-10 max-w-7xl mx-auto">
     <ul class="space-y-6">
-      <li *ngFor="let option of customizationOptions" class="flex items-center border-b pb-4">
+      <li *ngFor="let option of dynamicAttributes" class="flex items-center border-b pb-4">
         <!-- Bouton pour personnaliser -->
         <div class="w-72 shrink-0">
           <button
             class="bg-[#d1bfa7] text-white py-3 w-full rounded-lg hover:bg-[#b5a18c] transition-all shadow-md text-lg font-semibold text-center"
-            (click)="onCustomize(option)">
-            {{ option }}
+            (click)="onCustomize(option.type)">
+            {{ option.type }}
           </button>
         </div>
         <!-- Détails de l'attribut -->
         <div class="ml-4 flex-1">
-          <p *ngIf="selectedOptions[option]" class="text-gray-700">
-            {{ selectedOptions[option].reference }} -
-            {{ selectedOptions[option].designation }}
+          <p *ngIf="selectedOptions[option.type]" class="text-gray-700">
+            {{ selectedOptions[option.type].reference }} -
+            {{ selectedOptions[option.type].designation }}
           </p>
-          <p *ngIf="!selectedOptions[option]" class="text-gray-500 italic">
+          <p *ngIf="!selectedOptions[option.type]" class="text-gray-500 italic">
             Non défini
           </p>
         </div>

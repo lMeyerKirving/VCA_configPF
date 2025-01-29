@@ -2,8 +2,18 @@
   background-color: #f8f8f8;
 }
 
-h1 {
-  font-family: 'Playfair Display', serif;
+/*h1 {*/
+/*  font-family: 'Playfair Display', serif;*/
+/*}*/
+
+/*.numbers, td, th {*/
+/*  font-variant-numeric: tabular-nums;*/
+/*  font-family: 'Times New Roman', sans-serif;*/
+/*}*/
+
+h1, h2, p, button {
+  font-family: 'Times New Roman', monospace;
+  font-variant-numeric: tabular-nums;
 }
 
 .card {

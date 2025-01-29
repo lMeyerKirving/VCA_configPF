@@ -9,7 +9,7 @@ import {data} from 'autoprefixer';
 })
 
 export class ServicesComponent {
-  public audrosServer = ``;
+  public audrosServer = `https://dms-server/`;
   private _audrosSession: (string | undefined);
   public user = "audros";
   public psw = "aupwd";
@@ -116,6 +116,13 @@ export class ServicesComponent {
     console.log("URL d'ajout de lien :", url);
 
     return this._http.get<any>(url, { responseType: 'json' });
+  }
+
+  getAttribut(data: string):Observable<any>{
+    const param = "getAttribut";
+    const url = `${this.audrosServer}${this._baseUrl}${param}@${data}@`;
+    console.log("url", url);
+    return this._http.get<any>(url, {responseType : 'json'});
   }
 
   ensureLoggedIn(sessionID: string): Observable<any> {
