@@ -125,6 +125,13 @@ export class ServicesComponent {
     return this._http.get<any>(url, {responseType : 'json'});
   }
 
+  getFournisseur(data: string):Observable<any>{
+    const param = "getFournisseur";
+    const url = `${this.audrosServer}${this._baseUrl}${param}@${data}@`;
+    console.log("url", url);
+    return this._http.get<any>(url, {responseType : 'json'});
+  }
+
   ensureLoggedIn(sessionID: string): Observable<any> {
     if (!this._sessionId) {
       return this.log(sessionID);
