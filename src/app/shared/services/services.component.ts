@@ -90,11 +90,11 @@ export class ServicesComponent {
     return this._http.get<any>(url, {responseType : 'json'});
   }
 
-  getType(data: string):Observable<any>{
+  getType(type_objet: string, nom_type: string): Observable<any> {
     const param = "getTypeObject";
-    const url = `${this.audrosServer}${this._baseUrl}${param}@${data}@`;
-    console.log("url", url);
-    return this._http.get<any>(url, {responseType : 'json'});
+    const url = `${this.audrosServer}${this._baseUrl}${param}@${type_objet};${nom_type}@`;
+    console.log("URL:", url);
+    return this._http.get<any>(url, { responseType: 'json' });
   }
 
   getMBOM(numArt: string): Observable<any> {
@@ -131,6 +131,21 @@ export class ServicesComponent {
     console.log("url", url);
     return this._http.get<any>(url, {responseType : 'json'});
   }
+
+  getTypeBijoux(data: string):Observable<any>{
+    const param = "getTypeBijoux";
+    const url = `${this.audrosServer}${this._baseUrl}${param}@${data}@`;
+    console.log("url", url);
+    return this._http.get<any>(url, {responseType : 'json'});
+  }
+
+  getChild(data: string):Observable<any>{
+    const param = "getChild";
+    const url = `${this.audrosServer}${this._baseUrl}${param}@${data}@`;
+    console.log("url", url);
+    return this._http.get<any>(url, {responseType : 'json'});
+  }
+
 
   ensureLoggedIn(sessionID: string): Observable<any> {
     if (!this._sessionId) {

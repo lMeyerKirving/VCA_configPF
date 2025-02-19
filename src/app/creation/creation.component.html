@@ -26,14 +26,22 @@
         </div>
         <!-- Détails de l'attribut -->
         <div class="ml-4 flex-1">
+          <!-- Si un attribut est sélectionné -->
           <p *ngIf="selectedOptions[option.type]" class="text-gray-700">
-            {{ selectedOptions[option.type].reference }} -
-            {{ selectedOptions[option.type].designation }}
+            {{ selectedOptions[option.type].reference }} - {{ selectedOptions[option.type].designation }}
           </p>
-          <p *ngIf="!selectedOptions[option.type]" class="text-gray-500 italic">
-            Non défini
+
+          <!-- Si aucun attribut n'est sélectionné, afficher la nomenclature -->
+          <p *ngIf="!selectedOptions[option.type]">
+            <ng-container *ngIf="getNomenclature(option.type) as item">
+              <span class="text-gray-600 italic">{{ item.designation }}</span>
+            </ng-container>
+            <span *ngIf="!getNomenclature(option.type)" class="text-gray-500 italic">
+      Non défini
+    </span>
           </p>
         </div>
+
       </li>
     </ul>
   </div>

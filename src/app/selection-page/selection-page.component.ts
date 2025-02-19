@@ -27,6 +27,7 @@ export class SelectionPageComponent {
   sessionID: string | null = null; // Stocker sessionID
   objectID: string | null = null; // Stocker objectID
   num_art: string | null = null;
+  nom_type: string | null = null;
 
   constructor(private route: ActivatedRoute, private router: Router, private services: ServicesComponent) {}
 
@@ -35,15 +36,17 @@ export class SelectionPageComponent {
       this.currentOption = params['option']; // Récupérer l'attribut cliqué
       this.sessionID = params['sessionID']; // Récupérer sessionID
       this.objectID = params['objectID']; // Récupérer objectID
-      this.num_art = params['num_art']
-      if (this.currentOption) {
-        this.fetchData(this.currentOption);
+      this.num_art = params['num_art'];
+      this.nom_type = params['nom_type'];
+      console.log("FETCH DATA ??");
+      if (this.currentOption && this.nom_type) {
+        this.fetchData(this.currentOption, this.nom_type);
       }
     });
   }
 
-  fetchData(option: string): void {
-    this.services.getType(option).subscribe(
+  fetchData(option: string, nom_type: string): void {
+    this.services.getType(option, nom_type).subscribe(
       (response) => {
         if (response && response.data) {
           this.data = response.data;
@@ -58,6 +61,7 @@ export class SelectionPageComponent {
       }
     );
   }
+
 
   applyColumnSearch(): void {
     this.filteredData = this.data.filter(item => {

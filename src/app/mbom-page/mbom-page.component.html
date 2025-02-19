@@ -20,7 +20,7 @@
       </p>
       <button
         class="mt-4 bg-[#006F62] text-white py-2 px-4 rounded-lg hover:bg-[#00564C] shadow-md transition-all"
-        (click)="navigateToCreation(mbom.num_art)">
+        (click)="navigateToCreation(mbom.objectID, mbom.num_art)">
         Sélectionner
       </button>
     </div>
@@ -32,16 +32,30 @@
 
   <!-- Sélection du fournisseur et bouton Créer -->
   <div class="mt-12 flex justify-center items-center space-x-4">
-    <!-- Champ de sélection -->
-    <select
-      class="bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#006F62] w-1/4"
-      [(ngModel)]="selectedSupplier"
-    >
-      <option [ngValue]="null" disabled selected>Choisir un fournisseur</option>
-      <option *ngFor="let supplier of suppliers" [ngValue]="supplier">
-        {{ supplier.ref_utilisat }}
-      </option>
-    </select>
+    <!-- Champ de recherche avec auto-complétion -->
+    <div class="relative w-1/4">
+      <input
+        type="text"
+        class="bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#006F62] w-full"
+        [(ngModel)]="searchQuery"
+        (input)="filterSuppliers()"
+        placeholder="Rechercher un fournisseur"
+      />
+
+      <!-- Liste déroulante filtrée -->
+      <ul
+        *ngIf="filteredSuppliers.length > 0"
+        class="absolute z-10 bg-white border border-gray-300 rounded-lg shadow-lg mt-1 w-full"
+      >
+        <li
+          *ngFor="let supplier of filteredSuppliers"
+          class="px-3 py-2 hover:bg-gray-100 cursor-pointer"
+          (click)="selectSupplier(supplier)"
+        >
+          {{ supplier.ref_utilisat }}
+        </li>
+      </ul>
+    </div>
 
     <!-- Bouton Créer -->
     <button
@@ -56,5 +70,6 @@
       Créer
     </button>
   </div>
+
 
 </div>

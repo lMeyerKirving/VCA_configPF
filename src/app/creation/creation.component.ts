@@ -31,6 +31,9 @@ export class CreationComponent {
   isPopupVisible: boolean = false; // Contrôle de la visibilité de la pop-up
   currentOption: string | null = null; // Option en cours de personnalisation
 
+  nomenclature: { nom_type: string, type_objet: string, designation: string, reference: string }[] = [];
+
+
   constructor(private route: ActivatedRoute, private router: Router, private _ServicesComponent: ServicesComponent) {
     console.log('CreationComponent instantiated');
   }
@@ -75,6 +78,7 @@ export class CreationComponent {
       }
 
       this.loadDynamicAttributes();
+      this.loadNomenclature();
     });
   }
 
@@ -101,6 +105,9 @@ export class CreationComponent {
   }
 
   onCustomize(option: string): void {
+    const nomenclatureItem = this.nomenclature.find(n => n.type_objet === option);
+    const nom_type = nomenclatureItem ? nomenclatureItem.nom_type : ''; // Récupération de la table source
+
     this.router.navigate(['/selection'], {
       queryParams: {
         jewelry: this.selectedJewelry,
@@ -109,6 +116,7 @@ export class CreationComponent {
         sessionID: this.sessionID,
         objectID: this.objectID,
         num_art: this.num_art,
+        nom_type: nom_type  // Ajout du nom_type à l'URL
       },
     });
   }
@@ -204,4 +212,37 @@ export class CreationComponent {
       }
     }
   }
+
+  loadNomenclature(): void {
+    if (this.num_art) {
+      this._ServicesComponent.getChild(this.num_art).subscribe({
+        next: (response) => {
+          console.log("Nomenclature récupérée:", response);
+          if (response && response.data) {
+            this.nomenclature = response.data.flatMap((item: any) =>
+              item.types.flatMap((type: any) =>
+                type.details.map((detail: any) => ({
+                  type_objet: detail.type_objet,
+                  designation: detail.designation,
+                  reference: detail.ref_utilisat,
+                }))
+              )
+            );
+            console.log("Liste de la nomenclature:", this.nomenclature);
+          } else {
+            console.warn("Aucune nomenclature trouvée.");
+          }
+        },
+        error: (error) => {
+          console.error("Erreur lors de la récupération de la nomenclature:", error);
+        },
+      });
+    }
+  }
+
+  getNomenclature(type: string) {
+    return this.nomenclature.find(n => n.type_objet === type);
+  }
+
+
 }

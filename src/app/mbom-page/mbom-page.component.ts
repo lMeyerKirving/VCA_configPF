@@ -23,6 +23,11 @@ export class MBOMPageComponent implements OnInit {
 
   suppliers: { ref_utilisat: string, num_art: string }[] = []; // Liste des fournisseurs avec leur num_art
   selectedSupplier: { ref_utilisat: string, num_art: string } | null = null; // Fournisseur sélectionné
+  filteredSuppliers: { ref_utilisat: string, num_art: string }[] = []; // Liste filtrée
+  searchQuery: string = ''; // Recherche en cours
+  jewelryType: any | null = null;
+
+
 
   constructor(
     private route: ActivatedRoute,
@@ -61,6 +66,8 @@ export class MBOMPageComponent implements OnInit {
     });
   }
 
+
+
   fetchMBOMs(numArt: string): void {
     this.services.getMBOM(numArt).subscribe({
       next: (response) => {
@@ -73,6 +80,7 @@ export class MBOMPageComponent implements OnInit {
               revision: mbomEntry.revision || 'Non défini',
               designation: mbomEntry.designation || 'Non défini',
               num_art: mbomEntry.num_art || '',
+              objectID: this.objectID,
             }))
           );
           console.log('Processed MBOMs:', this.mboms);
@@ -89,7 +97,6 @@ export class MBOMPageComponent implements OnInit {
   fetchSuppliers(): void {
     this.services.getFournisseur("").subscribe({
       next: (response) => {
-        console.log("Fournisseurs récupérés:", response);
         if (response && response.data) {
           // Mappe les fournisseurs avec leurs `ref_utilisat` et `num_art`
           this.suppliers = response.data.map((item: { ref_utilisat: string, num_art: string }) => ({
@@ -107,13 +114,23 @@ export class MBOMPageComponent implements OnInit {
     });
   }
 
-  navigateToCreation(numArt: string): void {
-    this.router.navigate(['/creation'], {
-      queryParams: {
-        sessionID: this.sessionID,
-        objectID: this.objectID,
-        num_art: numArt, //num_art mbom
-        jewelry: 'Bracelet ouvert', //TODO: Recuperer le type de bijoux de manière dynamique
+  navigateToCreation(numArt: string, mbomNumArt: string): void {
+    console.log('Le num art du type de bijoux askip :',numArt)
+    this.services.getTypeBijoux(numArt).subscribe({
+      next: (response) => {
+        console.log('Type de bijou récupéré:', response);
+        const jewelryType = response?.data?.[0]?.type_objet || 'Inconnu'; // Par défaut, "Inconnu" si non trouvé
+        this.router.navigate(['/creation'], {
+          queryParams: {
+            sessionID: this.sessionID,
+            objectID: this.objectID,
+            num_art: mbomNumArt, // num_art de la MBOM
+            jewelry: jewelryType, // Type de bijou récupéré dynamiquement
+          },
+        });
+      },
+      error: (error) => {
+        console.error("Erreur lors de la récupération du type de bijou:", error);
       },
     });
   }
@@ -122,17 +139,40 @@ export class MBOMPageComponent implements OnInit {
     if (this.selectedSupplier) {
       console.log(`Créer une MBOM avec le fournisseur: ${this.selectedSupplier.ref_utilisat}, num_art: ${this.selectedSupplier.num_art}`);
       // Redirection vers la page de création avec le num_art du fournisseur
+      this.services.getTypeBijoux(this.selectedSupplier.num_art).subscribe({
+        next: (response) => {
+          console.log('Type de bijou récupéré pour le fournisseur:', response);
+          this.jewelryType = response?.data?.[0]?.type_objet || 'Inconnu'; // Par défaut, "Inconnu" si non trouvé
+        },
+        error: (error) => {
+          console.error("Erreur lors de la récupération du type de bijou:", error);
+        },
+      });
+
       this.router.navigate(['/creation'], {
         queryParams: {
           sessionID: this.sessionID,
           objectID: this.objectID,
-          num_art: this.selectedSupplier.num_art, // Transmet le num_art du fournisseur
-          jewelry: 'Bracelet ouvert', //TODO: Récupérer le type de bijoux de manière dynamique
+          num_art: this.selectedSupplier.num_art,
+          jewelry: this.jewelryType,
         },
       });
     } else {
       console.warn('Aucun fournisseur sélectionné.');
     }
+  }
+
+  filterSuppliers(): void {
+    const query = this.searchQuery.toLowerCase();
+    this.filteredSuppliers = this.suppliers.filter(supplier =>
+      supplier.ref_utilisat.toLowerCase().includes(query)
+    );
+  }
+
+  selectSupplier(supplier: { ref_utilisat: string, num_art: string }): void {
+    this.selectedSupplier = supplier;
+    this.searchQuery = supplier.ref_utilisat; // Affiche le fournisseur sélectionné dans le champ
+    this.filteredSuppliers = []; // Ferme la liste déroulante
   }
 
 }
