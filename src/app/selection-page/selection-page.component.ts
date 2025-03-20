@@ -38,12 +38,24 @@ export class SelectionPageComponent {
       this.objectID = params['objectID']; // Récupérer objectID
       this.num_art = params['num_art'];
       this.nom_type = params['nom_type'];
-      console.log("FETCH DATA ??");
+
+      // 🔹 DEBUGGING LOGS 🔹
+      console.log("✅ Paramètres récupérés dans selection-page.component.ts:");
+      console.log("➡ currentOption:", this.currentOption);
+      console.log("➡ sessionID:", this.sessionID);
+      console.log("➡ objectID:", this.objectID);
+      console.log("➡ num_art:", this.num_art);
+      console.log("➡ nom_type:", this.nom_type);
+
       if (this.currentOption && this.nom_type) {
+        console.log("🚀 Fetching data dans le if !");
         this.fetchData(this.currentOption, this.nom_type);
+      } else {
+        console.warn("⚠️ currentOption ou nom_type est undefined !");
       }
     });
   }
+
 
   fetchData(option: string, nom_type: string): void {
     this.services.getType(option, nom_type).subscribe(

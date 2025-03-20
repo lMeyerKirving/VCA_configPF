@@ -85,28 +85,36 @@ export class CreationComponent {
 
   loadDynamicAttributes(): void {
     if (this.selectedJewelry) {
+      console.log("🔍 Envoi de la requête pour récupérer les attributs de:", this.selectedJewelry);
+
       this._ServicesComponent.getAttribut(this.selectedJewelry).subscribe({
         next: (response) => {
-          console.log("Attributs récupérés:", response);
+          console.log("Attributs récupérés du backend:", response);
           if (response && response.data) {
-            this.dynamicAttributes = response.data; // Stocke les données récupérées
-            this.customizationOptions = response.data.map((attr: { type: any; }) => attr.type); // Extrait seulement les types
+            this.dynamicAttributes = response.data.map((attr: { classe_fille: string, type: string }) => ({
+              classe_fille: attr.classe_fille,
+              type: attr.type
+            }));
+            console.log("✅ Attributs chargés et formatés:", this.dynamicAttributes);
           } else {
-            console.warn("Aucun attribut trouvé pour ce bijou.");
+            console.warn("⚠️ Aucun attribut trouvé pour ce bijou.");
           }
         },
         error: (error) => {
-          console.error("Erreur lors de la récupération des attributs:", error);
+          console.error("❌ Erreur lors de la récupération des attributs:", error);
         }
       });
     } else {
-      console.log("Pas de bijou sélectionné");
+      console.error("🚨 Aucun bijou sélectionné (selectedJewelry est null ou vide)");
     }
   }
+
 
   onCustomize(option: string): void {
     const nomenclatureItem = this.nomenclature.find(n => n.type_objet === option);
     const nom_type = nomenclatureItem ? nomenclatureItem.nom_type : ''; // Récupération de la table source
+
+    console.log("🔹 Navigating to selection with:", { option, nom_type });
 
     this.router.navigate(['/selection'], {
       queryParams: {
@@ -222,13 +230,14 @@ export class CreationComponent {
             this.nomenclature = response.data.flatMap((item: any) =>
               item.types.flatMap((type: any) =>
                 type.details.map((detail: any) => ({
+                  nom_type: type.nom_type, // 🔥 Ajout du nom_type ici
                   type_objet: detail.type_objet,
                   designation: detail.designation,
                   reference: detail.ref_utilisat,
                 }))
               )
             );
-            console.log("Liste de la nomenclature:", this.nomenclature);
+            console.log("Liste de la nomenclature avec nom_type:", this.nomenclature);
           } else {
             console.warn("Aucune nomenclature trouvée.");
           }
@@ -240,9 +249,15 @@ export class CreationComponent {
     }
   }
 
+
+
   getNomenclature(type: string) {
-    return this.nomenclature.find(n => n.type_objet === type);
+    const result = this.nomenclature.find(n => n.type_objet === type);
+    console.log("🔍 Recherche de type:", type, "➡️ Résultat trouvé:", result);
+    return result;
   }
+
+
 
 
 }

@@ -24,27 +24,33 @@
             {{ option.type }}
           </button>
         </div>
+
         <!-- Détails de l'attribut -->
         <div class="ml-4 flex-1">
-          <!-- Si un attribut est sélectionné -->
-          <p *ngIf="selectedOptions[option.type]" class="text-gray-700">
+          <!-- Vérifier si un attribut a été sélectionné -->
+          <p *ngIf="selectedOptions[option.type]; else displayNomenclature" class="text-gray-700">
             {{ selectedOptions[option.type].reference }} - {{ selectedOptions[option.type].designation }}
           </p>
 
-          <!-- Si aucun attribut n'est sélectionné, afficher la nomenclature -->
-          <p *ngIf="!selectedOptions[option.type]">
-            <ng-container *ngIf="getNomenclature(option.type) as item">
-              <span class="text-gray-600 italic">{{ item.designation }}</span>
-            </ng-container>
-            <span *ngIf="!getNomenclature(option.type)" class="text-gray-500 italic">
-      Non défini
-    </span>
-          </p>
-        </div>
+          <!-- Si aucun attribut sélectionné, afficher la nomenclature -->
+          <ng-template #displayNomenclature>
+            <p *ngIf="!selectedOptions[option.type]">
+              <ng-container *ngIf="getNomenclature(option.type) as item">
+                <span class="text-gray-600 italic">
+                  {{ item.designation }}
+                </span>
+              </ng-container>
+              <span *ngIf="!getNomenclature(option.type)" class="text-gray-500 italic">
+                Non défini (option.type: {{ option.type }})
+              </span>
+            </p>
 
+          </ng-template>
+        </div>
       </li>
     </ul>
   </div>
+
 
   <!-- Bouton Enregistrer -->
   <div class="flex justify-center mt-12">

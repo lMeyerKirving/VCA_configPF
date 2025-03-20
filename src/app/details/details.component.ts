@@ -10,7 +10,7 @@ type DataMap = { [key: string]: string[] };
   templateUrl: './details.component.html',
   imports: [
     NgForOf,
-    RouterLink
+    //RouterLink
   ],
   styleUrls: ['./details.component.css']
 })
