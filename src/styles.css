@@ -6,6 +6,7 @@
 /* Appliquer Roboto à tout le texte par défaut */
 body {
   font-family: 'Times New Roman', sans-serif;
+  font-variant-numeric: lining-nums;
   color: #333333;
   background-color: #f8f8f8;
 }
@@ -13,6 +14,7 @@ body {
 /* Appliquer Playfair Display uniquement aux titres */
 h1, h2, h3, h4, h5, h6, .font-title {
   font-family: 'Playfair Display', serif;
+  font-variant-numeric: lining-nums;
 }
 
 /* Forcer une taille uniforme pour les chiffres */

@@ -22,7 +22,7 @@ export class MBOMPageComponent implements OnInit {
   sessionID: string | null = null;
 
   suppliers: { ref_utilisat: string, num_art: string }[] = []; // Liste des fournisseurs avec leur num_art
-  selectedSupplier: { ref_utilisat: string, num_art: string } | null = null; // Fournisseur sélectionné
+  selectedSupplier: { ref_utilisat: string, num_art: string } = { ref_utilisat: '', num_art: '' }; // Fournisseur sélectionné
   filteredSuppliers: { ref_utilisat: string, num_art: string }[] = []; // Liste filtrée
   searchQuery: string = ''; // Recherche en cours
   jewelryType: any | null = null;
@@ -80,6 +80,7 @@ export class MBOMPageComponent implements OnInit {
               revision: mbomEntry.revision || 'Non défini',
               designation: mbomEntry.designation || 'Non défini',
               num_art: mbomEntry.num_art || '',
+              fournisseur: mbomEntry.fournisseur || 'Non défini',
               objectID: this.objectID,
             }))
           );
@@ -137,30 +138,35 @@ export class MBOMPageComponent implements OnInit {
 
   createMBOM(): void {
     if (this.selectedSupplier) {
-      console.log(`Créer une MBOM avec le fournisseur: ${this.selectedSupplier.ref_utilisat}, num_art: ${this.selectedSupplier.num_art}`);
-      // Redirection vers la page de création avec le num_art du fournisseur
-      this.services.getTypeBijoux(this.selectedSupplier.num_art).subscribe({
-        next: (response) => {
-          console.log('Type de bijou récupéré pour le fournisseur:', response);
-          this.jewelryType = response?.data?.[0]?.type_objet || 'Inconnu'; // Par défaut, "Inconnu" si non trouvé
-        },
-        error: (error) => {
-          console.error("Erreur lors de la récupération du type de bijou:", error);
-        },
-      });
+      if (this.objectID != null) {
+        console.log(`Créer une MBOM avec le fournisseur: ${this.selectedSupplier.ref_utilisat}, num_art: ${this.objectID}`);
 
-      this.router.navigate(['/creation'], {
-        queryParams: {
-          sessionID: this.sessionID,
-          objectID: this.objectID,
-          num_art: this.selectedSupplier.num_art,
-          jewelry: this.jewelryType,
-        },
-      });
+        // Récupération du type de bijou avant de naviguer
+        this.services.getTypeBijoux(this.objectID).subscribe({
+          next: (response) => {
+            this.jewelryType = response?.data?.[0]?.type_objet || 'Inconnu';
+            console.log('Type de bijou récupéré pour le fournisseur:', this.jewelryType);
+
+            // Maintenant que la donnée est chargée, on peut naviguer
+            this.router.navigate(['/creation'], {
+              queryParams: {
+                sessionID: this.sessionID,
+                objectID: this.objectID,
+                num_art: this.selectedSupplier.num_art,
+                jewelry: this.jewelryType,
+              },
+            });
+          },
+          error: (error) => {
+            console.error("Erreur lors de la récupération du type de bijou:", error);
+          },
+        });
+      }
     } else {
       console.warn('Aucun fournisseur sélectionné.');
     }
   }
+
 
   filterSuppliers(): void {
     const query = this.searchQuery.toLowerCase();
